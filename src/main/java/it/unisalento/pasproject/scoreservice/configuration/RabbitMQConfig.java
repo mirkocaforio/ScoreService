@@ -43,6 +43,37 @@ public class RabbitMQConfig {
 
     // ------  END SECURITY  ------ //
 
+    // ------  SCORE  ------ //
+
+    @Value("${rabbitmq.queue.score.name}")
+    private String scoreQueue;
+
+    @Value("${rabbitmq.exchange.score.name}")
+    private String scoreExchange;
+
+    @Value("${rabbitmq.routing.score.key}")
+    private String scoreRoutingKey;
+
+    @Bean
+    public Queue scoreQueue() {
+        return new Queue(scoreQueue);
+    }
+
+    @Bean
+    public TopicExchange scoreExchange() {
+        return new TopicExchange(scoreExchange);
+    }
+
+    @Bean
+    public Binding scoreBinding() {
+        return BindingBuilder
+                .bind(scoreQueue())
+                .to(scoreExchange())
+                .with(scoreRoutingKey);
+    }
+
+    // ------  END SCORE  ------ //
+
     /**
      * Creates a message converter for JSON messages.
      *

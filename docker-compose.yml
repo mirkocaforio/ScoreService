@@ -16,23 +16,23 @@ services:
     working_dir: /app
     entrypoint: java -Xdebug -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:8000 -jar /app/app.jar
 
-    score-db:
-      image: mongo:latest
-      container_name: scoredb
-      ports:
-        - "${MONGO_PORT}:27017"
-      volumes:
-        - mongo_score:/etc/mongo
-        - mongo_score_data:/data/db
-        - mongo_score_config:/data/configdb
-      networks:
-        - greenspot-net
+  score-db:
+    image: mongo:latest
+    container_name: scoredb
+    ports:
+      - "${MONGO_PORT}:27017"
+    volumes:
+      - mongo_score:/etc/mongo
+      - mongo_score_data:/data/db
+      - mongo_score_config:/data/configdb
+    networks:
+      - greenspot-net
 
-  networks:
-    greenspot-net:
-      name: greenspot_net
+networks:
+  greenspot-net:
+    name: greenspot-net
 
-  volumes:
-    mongo_score:
-    mongo_score_data:
-    mongo_score_config:
+volumes:
+  mongo_score:
+  mongo_score_data:
+  mongo_score_config:
