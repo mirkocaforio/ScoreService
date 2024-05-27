@@ -7,5 +7,4 @@ import java.util.List;
 
 public interface GpuRepository extends MongoRepository<Gpu, String> {
     Gpu findByName(String name);
-    List<String> findAllNames();
 }

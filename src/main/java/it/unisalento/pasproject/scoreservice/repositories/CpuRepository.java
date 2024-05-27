@@ -7,5 +7,4 @@ import java.util.List;
 
 public interface CpuRepository extends MongoRepository<Cpu, String> {
     Cpu findByName(String name);
-    List<String> findAllNames();
 }

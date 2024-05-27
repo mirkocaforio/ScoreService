@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/gpus")
@@ -26,6 +27,8 @@ public class GpuControllerTest {
 
     @GetMapping("/names")
     public List<String> getAllGpuNames() {
-        return gpuRepository.findAllNames();
+        return gpuRepository.findAll().stream()
+                .map(Gpu::getName)
+                .collect(Collectors.toList());
     }
 }
