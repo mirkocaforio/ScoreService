@@ -36,7 +36,7 @@ public class GpuDataRetrievalStrategy implements DataRetrievalStrategy {
 
     @Override
     public void retrieveData() {
-        List<String> gpuUrls = Arrays.asList(GPU_BENCHMARKS_URL, MAC_BENCHMARKS_URL);
+        List<String> gpuUrls = Arrays.asList(MAC_BENCHMARKS_URL, GPU_BENCHMARKS_URL);
 
         gpuRepository.deleteAll(); // Rimuove la vecchia collezione se esiste
 
@@ -51,6 +51,7 @@ public class GpuDataRetrievalStrategy implements DataRetrievalStrategy {
                     if (url.equals(gpuUrls.getFirst()) && gpu.getDescription() != null && gpu.getDescription().contains("Apple M")) {
                         String normalizedGpuName = normalizeGpuName(gpu.getDescription());
                         gpu.setName(normalizedGpuName);
+                        gpu.setDescription(normalizedGpuName);
                     }
                     uniqueGpus.putIfAbsent(gpu.getName(), gpu);
                 }
