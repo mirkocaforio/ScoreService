@@ -12,11 +12,20 @@ import java.util.List;
 @RestController
 @RequestMapping("/gpus")
 public class GpuControllerTest {
+    private final GpuRepository gpuRepository;
+
     @Autowired
-    private GpuRepository gpuRepository;
+    public GpuControllerTest(GpuRepository gpuRepository) {
+        this.gpuRepository = gpuRepository;
+    }
 
     @GetMapping
     public List<Gpu> getAllGpus() {
         return gpuRepository.findAll();
+    }
+
+    @GetMapping("/names")
+    public List<String> getAllGpuNames() {
+        return gpuRepository.findAllNames();
     }
 }

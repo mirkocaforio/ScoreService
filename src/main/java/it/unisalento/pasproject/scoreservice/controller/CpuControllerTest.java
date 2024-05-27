@@ -12,11 +12,20 @@ import java.util.List;
 @RestController
 @RequestMapping("/cpus")
 public class CpuControllerTest {
+    private final CpuRepository cpuRepository;
+
     @Autowired
-    private CpuRepository cpuRepository;
+    public CpuControllerTest(CpuRepository cpuRepository) {
+        this.cpuRepository = cpuRepository;
+    }
 
     @GetMapping
     public List<Cpu> getAllCpus() {
         return cpuRepository.findAll();
+    }
+
+    @GetMapping("/names")
+    public List<String> getAllCpuNames() {
+        return cpuRepository.findAllNames();
     }
 }
