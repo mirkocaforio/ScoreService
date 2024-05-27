@@ -48,10 +48,13 @@ public class GpuDataRetrievalStrategy implements DataRetrievalStrategy {
                 Gpu[] gpus = parseGpuData(response.body());
 
                 for (Gpu gpu : gpus) {
-                    if (url.equals(gpuUrls.getFirst()) && gpu.getDescription() != null && gpu.getDescription().contains("Apple M")) {
-                        String normalizedGpuName = normalizeGpuName(gpu.getDescription());
-                        gpu.setName(normalizedGpuName);
-                        gpu.setDescription(normalizedGpuName);
+                    if (url.equals(gpuUrls.getFirst())) {
+                        if (gpu.getDescription() != null && gpu.getDescription().contains("Apple M")) {
+                            String normalizedGpuName = normalizeGpuName(gpu.getDescription());
+                            gpu.setName(normalizedGpuName);
+                            gpu.setDescription(normalizedGpuName);
+                            uniqueGpus.putIfAbsent(gpu.getName(), gpu);
+                        }
                     }
                     uniqueGpus.putIfAbsent(gpu.getName(), gpu);
                 }
