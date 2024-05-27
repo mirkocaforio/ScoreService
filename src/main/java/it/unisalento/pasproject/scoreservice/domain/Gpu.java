@@ -14,6 +14,7 @@ public class Gpu {
     @Id
     private int id;
     private String name;
+    private String description;
     private double opencl;
     private double vulkan;
     private double metal;
