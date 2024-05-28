@@ -47,6 +47,20 @@ public class ScoreMessageHandler {
                     return null;
                 }
             }
+            case "soc" -> {
+                Optional<Cpu> cpu = Optional.ofNullable(cpuRepository.findByName(message.getResourceName()));
+                Optional<Gpu> gpu = Optional.ofNullable(gpuRepository.findByName(message.getResourceName()));
+                if (cpu.isPresent() && gpu.isPresent()) {
+                    scoreDTO.setScore(cpu.get().getScore());
+                    scoreDTO.setMulticore_score(cpu.get().getMulticore_score());
+                    scoreDTO.setOpencl(gpu.get().getOpencl());
+                    scoreDTO.setVulkan(gpu.get().getVulkan());
+                    scoreDTO.setCuda(gpu.get().getCuda());
+                    //TODO: Vedere se fino alla fine inglobare il Metal
+                } else {
+                    return null;
+                }
+            }
             default -> throw new InvalidResourceType("Invalid resource type: " + message.getResourceType());
         }
         return scoreDTO;
