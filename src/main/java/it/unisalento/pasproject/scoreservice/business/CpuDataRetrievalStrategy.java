@@ -48,13 +48,17 @@ public class CpuDataRetrievalStrategy implements DataRetrievalStrategy {
                 HttpResponse<String> response = sendHttpRequest(url);
                 Cpu[] cpus = parseCpuData(response.body());
 
-                for (Cpu cpu : cpus) {
-                    if (url.equals(cpuUrls.getFirst())) {
+                if (url.equals(cpuUrls.getFirst())) {
+                    for (Cpu cpu : cpus) {
                         String normalizedCpuName = normalizeCpuName(cpu.getDescription());
                         cpu.setName(normalizedCpuName);
                         cpu.setDescription(normalizedCpuName);
+                        uniqueCpus.putIfAbsent(cpu.getName(), cpu);
                     }
-                    uniqueCpus.putIfAbsent(cpu.getName(), cpu);
+                } else {
+                    for (Cpu cpu : cpus) {
+                        uniqueCpus.putIfAbsent(cpu.getName(), cpu);
+                    }
                 }
 
                 LOGGER.info("Retrieved {} unique CPUs from {}", uniqueCpus.size(), url);

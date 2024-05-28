@@ -47,16 +47,19 @@ public class GpuDataRetrievalStrategy implements DataRetrievalStrategy {
                 HttpResponse<String> response = sendHttpRequest(url);
                 Gpu[] gpus = parseGpuData(response.body());
 
-                for (Gpu gpu : gpus) {
-                    if (url.equals(gpuUrls.getFirst())) {
-                        if (gpu.getDescription() != null && gpu.getDescription().contains("Apple M")) {
+                if (url.equals(gpuUrls.getFirst())) {
+                    for (Gpu gpu : gpus) {
+                        if (gpu.getDescription().contains("Apple M")) {
                             String normalizedGpuName = normalizeGpuName(gpu.getDescription());
                             gpu.setName(normalizedGpuName);
                             gpu.setDescription(normalizedGpuName);
                             uniqueGpus.putIfAbsent(gpu.getName(), gpu);
                         }
                     }
-                    uniqueGpus.putIfAbsent(gpu.getName(), gpu);
+                } else {
+                    for (Gpu gpu : gpus) {
+                        uniqueGpus.putIfAbsent(gpu.getName(), gpu);
+                    }
                 }
             } catch (IOException | InterruptedException e) {
                 LOGGER.error("Failed to update GPU data", e);
