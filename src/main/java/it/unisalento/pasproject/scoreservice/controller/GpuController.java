@@ -23,7 +23,7 @@ public class GpuController {
         return scoreService.getAllGpus();
     }
 
-    @GetMapping(value = "gpus/names")
+    @GetMapping(value = "/gpus/names")
     public ResourceNameListDTO getAllGpuNames() {
         return scoreService.getAllGpuNames();
     }

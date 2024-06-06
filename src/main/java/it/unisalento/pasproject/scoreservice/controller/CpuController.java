@@ -24,7 +24,7 @@ public class CpuController {
         return scoreService.getAllCpus();
     }
 
-    @GetMapping(value = "cpus/names")
+    @GetMapping(value = "/cpus/names")
     public ResourceNameListDTO getAllCpuNames() {
         return scoreService.getAllCpuNames();
     }
