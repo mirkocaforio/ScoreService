@@ -13,17 +13,37 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+/**
+ * Service class responsible for handling score messages.
+ * It listens for messages on a RabbitMQ queue and processes them based on the resource type (CPU, GPU, SoC).
+ * The processing involves fetching the score details from the corresponding repository and assembling a {@link ScoreDTO}.
+ */
 @Service
 public class ScoreMessageHandler {
     private final CpuRepository cpuRepository;
     private final GpuRepository gpuRepository;
 
+    /**
+     * Constructs a ScoreMessageHandler with the necessary repositories.
+     *
+     * @param cpuRepository The repository for CPU entities.
+     * @param gpuRepository The repository for GPU entities.
+     */
     @Autowired
     public ScoreMessageHandler(CpuRepository cpuRepository, GpuRepository gpuRepository) {
         this.cpuRepository = cpuRepository;
         this.gpuRepository = gpuRepository;
     }
 
+    /**
+     * Receives and processes score messages from a RabbitMQ queue.
+     * The method determines the type of resource (CPU, GPU, SoC) from the message and fetches the corresponding scores.
+     * If the resource is found, it populates and returns a {@link ScoreDTO}; otherwise, it returns null.
+     *
+     * @param message The score message received from the queue.
+     * @return A {@link ScoreDTO} with the score details or null if the resource is not found.
+     * @throws InvalidResourceType if the resource type in the message is not recognized.
+     */
     @RabbitListener(queues = "${rabbitmq.queue.score.name}")
     public ScoreDTO receiveScoreMessage(ScoreMessageDTO message) {
         ScoreDTO scoreDTO = new ScoreDTO();

@@ -12,17 +12,34 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Service class for handling operations related to CPU and GPU scores.
+ * Provides methods to convert CPU and GPU entities to their respective DTOs,
+ * retrieve all CPUs and GPUs, and fetch names of all CPUs and GPUs.
+ */
 @Service
 public class ScoreService {
     private final CpuRepository cpuRepository;
     private final GpuRepository gpuRepository;
     private static final Logger LOGGER = LoggerFactory.getLogger(ScoreService.class);
 
+    /**
+     * Constructs a ScoreService with necessary CPU and GPU repositories.
+     *
+     * @param cpuRepository The repository for CPU entities.
+     * @param gpuRepository The repository for GPU entities.
+     */
     public ScoreService(CpuRepository cpuRepository, GpuRepository gpuRepository) {
         this.cpuRepository = cpuRepository;
         this.gpuRepository = gpuRepository;
     }
 
+    /**
+     * Converts a Cpu entity to a CpuDTO.
+     *
+     * @param cpu The Cpu entity to convert.
+     * @return The converted CpuDTO.
+     */
     public CpuDTO getCpu(Cpu cpu) {
         CpuDTO cpuDTO = new CpuDTO();
 
@@ -35,7 +52,12 @@ public class ScoreService {
         return cpuDTO;
     }
 
-
+    /**
+     * Converts a Gpu entity to a GpuDTO.
+     *
+     * @param gpu The Gpu entity to convert.
+     * @return The converted GpuDTO.
+     */
     public GpuDTO getGpu(Gpu gpu) {
         GpuDTO gpuDTO = new GpuDTO();
 
@@ -50,18 +72,33 @@ public class ScoreService {
         return gpuDTO;
     }
 
+    /**
+     * Retrieves all CPUs and converts them to a list of CpuDTOs.
+     *
+     * @return A CpuListDTO containing a list of CpuDTOs.
+     */
     public CpuListDTO getAllCpus() {
         CpuListDTO cpuListDTO = new CpuListDTO();
         cpuListDTO.setCpuList(cpuRepository.findAll().stream().map(this::getCpu).toList());
         return cpuListDTO;
     }
 
+    /**
+     * Retrieves all GPUs and converts them to a list of GpuDTOs.
+     *
+     * @return A GpuListDTO containing a list of GpuDTOs.
+     */
     public GpuListDTO getAllGpus() {
         GpuListDTO gpuListDTO = new GpuListDTO();
         gpuListDTO.setGpuList(gpuRepository.findAll().stream().map(this::getGpu).toList());
         return gpuListDTO;
     }
 
+    /**
+     * Retrieves names of all CPUs and wraps them in a ResourceNameListDTO.
+     *
+     * @return A ResourceNameListDTO containing names of all CPUs.
+     */
     public ResourceNameListDTO getAllCpuNames() {
         ResourceNameListDTO resourceNameListDTO = new ResourceNameListDTO();
 
@@ -77,6 +114,11 @@ public class ScoreService {
         return resourceNameListDTO;
     }
 
+    /**
+     * Retrieves names of all GPUs and wraps them in a ResourceNameListDTO.
+     *
+     * @return A ResourceNameListDTO containing names of all GPUs.
+     */
     public ResourceNameListDTO getAllGpuNames() {
         ResourceNameListDTO resourceNameListDTO = new ResourceNameListDTO();
 

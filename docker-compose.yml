@@ -30,7 +30,6 @@ services:
 
 networks:
   greenspot-net:
-    name: greenspot-net
 
 volumes:
   mongo_score:

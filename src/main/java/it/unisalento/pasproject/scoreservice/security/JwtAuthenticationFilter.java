@@ -1,6 +1,5 @@
 package it.unisalento.pasproject.scoreservice.security;
 
-
 import it.unisalento.pasproject.scoreservice.dto.UserDetailsDTO;
 import it.unisalento.pasproject.scoreservice.exceptions.AccessDeniedException;
 import it.unisalento.pasproject.scoreservice.exceptions.UserNotAuthorizedException;
@@ -21,16 +20,30 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+/**
+ * A filter for JWT (JSON Web Token) authentication that extends {@link OncePerRequestFilter}.
+ * This filter intercepts all HTTP requests to authenticate users based on the JWT token provided in the Authorization header.
+ */
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Autowired
-    private JwtUtilities jwtUtilities ;
+    private JwtUtilities jwtUtilities;
 
     @Autowired
     private UserCheckService userCheckService;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
 
+    /**
+     * Processes each HTTP request, extracting and validating the JWT token from the Authorization header.
+     * If the token is valid, it authenticates the user and sets the security context.
+     *
+     * @param request     the HTTP request
+     * @param response    the HTTP response
+     * @param chain       the filter chain
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException      if an I/O error occurs during request processing
+     */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
@@ -53,7 +66,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             throw new AccessDeniedException("Invalid token: " + e.getMessage());
         }
 
-
         if (username != null && role != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetailsDTO user = this.userCheckService.loadUserByUsername(username);
 
@@ -61,8 +73,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String userRole;
             boolean userEnabled;
 
-            // Se token valido e risposta del cqrs null, si assume che l'utente sia l'email del token
-            if (user == null){
+            if (user == null) {
                 LOGGER.info("User not found in CQRS, assuming user is the email from the token");
                 userEmail = username;
                 userRole = role;
@@ -90,7 +101,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
         }
 
-        if ( SecurityContextHolder.getContext().getAuthentication() == null ) {
+        if (SecurityContextHolder.getContext().getAuthentication() == null) {
             throw new AccessDeniedException("No authentication found");
         }
 

@@ -11,10 +11,11 @@ on:
         description: 'Forced build'
   push:
     branches:
-      - main
       - master
+      - main
     paths:
       - '/*.java'
+      - '**/*.java'
       - '/application.properties'
       - '/resources/*'
       - '*.gradle'
@@ -48,9 +49,11 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
 
+      - name: Start test chain
+        run: ./gradlew test
+
       - name: Build with Gradle
         run: ./gradlew bootJar
-
 
       - name: Get latest tag
         id: tag_version
